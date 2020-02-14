@@ -17,7 +17,6 @@ public class Partidas implements java.io.Serializable {
 	private Date fecha;
 
 	public Partidas() {
-		terminada = false;
 	}
 
 	public Partidas(Integer idSession, Integer jugadorA, Integer jugadorB, Integer ganador, Boolean terminada,

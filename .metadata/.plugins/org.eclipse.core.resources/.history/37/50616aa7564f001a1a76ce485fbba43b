@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 
 import model.Cartas;
 import model.Jugadores;
-import model.Partidas;
 
 
 @Path("/inicio")
@@ -53,32 +52,6 @@ public class PartidaApi extends ResourceConfig{
 		Gson gson = new Gson();
 		Jugadores jugador = gson.fromJson(jSonJugador, Jugadores.class);
 		session.save(jugador);
-		transaction.commit();
-	}
-	
-	@POST
-	@Path("/nuevaPartida")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void nuevaPartida(String jsonPartida) {
-		sFactory = HibernateUtil.getSessionFactory();
-		session = sFactory.openSession();
-		transaction = session.beginTransaction();
-		Gson gson = new Gson();
-		Partidas partida = gson.fromJson(jsonPartida, Partidas.class);
-		session.save(partida);
-		transaction.commit();
-	}
-	
-	@POST
-	@Path("/insertarCarta")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void insertarCarta(String jsonCarta) {
-		sFactory = HibernateUtil.getSessionFactory();
-		session = sFactory.openSession();
-		transaction = session.beginTransaction();
-		Gson gson = new Gson();
-		Cartas carta = gson.fromJson(jsonCarta, Cartas.class); 
-		session.save(carta);
 		transaction.commit();
 	}
 }

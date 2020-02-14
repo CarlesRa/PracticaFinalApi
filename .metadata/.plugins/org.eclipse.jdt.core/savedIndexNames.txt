@@ -26,7 +26,6 @@ INDEX VERSION 1.131+/home/carles/Acceso a Datos/eclipse-workNew/.metadata/.plugi
 3842938842.index
 2802670165.index
 2039652224.index
-3717495669.index
 1091880516.index
 1945830993.index
 1412531620.index

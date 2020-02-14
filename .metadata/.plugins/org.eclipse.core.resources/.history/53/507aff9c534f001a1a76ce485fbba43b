@@ -15,9 +15,6 @@ public class Jugadores implements java.io.Serializable {
 	private Integer perdidas;
 
 	public Jugadores() {
-		ganadas = 0;
-		empatadas = 0;
-		perdidas = 0;
 	}
 
 	public Jugadores(String nickName, String email, String password, Integer ganadas, Integer empatadas,
