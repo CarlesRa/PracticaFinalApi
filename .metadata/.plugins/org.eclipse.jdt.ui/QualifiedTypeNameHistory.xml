@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="model.Cartas"/>
+    <fullyQualifiedTypeName name="model.Jugadores"/>
+    <fullyQualifiedTypeName name="javax.ws.rs.Consumes"/>
+    <fullyQualifiedTypeName name="com.google.gson.Gson"/>
+    <fullyQualifiedTypeName name="javax.ws.rs.core.MediaType"/>
+    <fullyQualifiedTypeName name="com.carlesramos.hibernateutility.HibernateUtil"/>
+    <fullyQualifiedTypeName name="model.Partidas"/>
+</qualifiedTypeNameHistroy>

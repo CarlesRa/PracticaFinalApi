@@ -1,17 +1,21 @@
 package com.carlesramos.services;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import com.carlesramos.hibernateutility.HibernateUtil;
 import com.google.gson.Gson;
@@ -38,6 +42,21 @@ public class PartidaApi extends ResourceConfig{
 	@Path("/saluda")
 	public String saluda() {
 		return "Bienvenido!!";
+	}
+	
+	@GET
+	@Path("/nickNameExists/{a}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public boolean nickNameExist(@PathParam("a")String nickName) {
+		sFactory = HibernateUtil.getSessionFactory();
+		session = sFactory.openSession();
+		Query query = session.createQuery("from Jugadores where nickName = :nickName");
+		query.setParameter("nickName", nickName);
+		List<?> list = query.getResultList();
+		if (list.size() == 0) {
+			return false;
+		}
+		else return true;
 	}
 	
 	

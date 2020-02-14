@@ -1,0 +1,7 @@
+0:0:0:0:0:0:0:1 - - [15/Feb/2020:00:00:02 +0100] "GET /ApiJuegoDef/rest/inicio/nickNameExists/hola HTTP/1.1" 500 719
+127.0.0.1 - - [15/Feb/2020:00:02:41 +0100] "GET / HTTP/1.1" 404 637
+127.0.0.1 - - [15/Feb/2020:00:02:41 +0100] "GET /ApiJuegoDef/ HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [15/Feb/2020:00:02:50 +0100] "GET /ApiJuegoDef/rest/inicio/nickNameExists/hola HTTP/1.1" 200 5
+0:0:0:0:0:0:0:1 - - [15/Feb/2020:00:03:38 +0100] "POST /ApiJuegoDef/rest/inicio/insertJugador HTTP/1.1" 404 641
+0:0:0:0:0:0:0:1 - - [15/Feb/2020:00:03:47 +0100] "POST /ApiJuegoDef/rest/inicio/insertarJugador HTTP/1.1" 204 -
+0:0:0:0:0:0:0:1 - - [15/Feb/2020:00:04:01 +0100] "GET /ApiJuegoDef/rest/inicio/nickNameExists/Manolo HTTP/1.1" 200 4
