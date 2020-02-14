@@ -2,9 +2,11 @@ package com.carlesramos.services;
 
 import java.util.ArrayList;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.hibernate.Session;
@@ -12,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import com.carlesramos.hibernateutility.HibernateUtil;
+import com.google.gson.Gson;
 
 import model.Cartas;
 import model.Jugadores;
@@ -40,14 +43,15 @@ public class PartidaApi extends ResourceConfig{
 	//POST METHODS
 	
 	@POST
-	@Path("/insertar")
-	public void insertCarta() {
+	@Path("/insertarJugador")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void insertJugador(String jSonJugador){
 		sFactory = HibernateUtil.getSessionFactory();
 		session = sFactory.openSession();
 		transaction = session.beginTransaction();
-		Jugadores jugador = new Jugadores("Manol","manol@gmail.com","holaMundo",0,0,0);
+		Gson gson = new Gson();
+		Jugadores jugador = gson.fromJson(jSonJugador, Jugadores.class);
 		session.save(jugador);
 		transaction.commit();
 	}
-	
 }
