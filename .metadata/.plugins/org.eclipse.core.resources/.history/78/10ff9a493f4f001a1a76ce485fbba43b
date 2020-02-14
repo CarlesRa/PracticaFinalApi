@@ -1,0 +1,52 @@
+package com.carlesramos.services;
+
+import java.util.ArrayList;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
+import org.glassfish.jersey.server.ResourceConfig;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
+import com.carlesramos.hibernateutility.HibernateUtil;
+
+
+@Path("/inicio")
+public class PartidaApi extends ResourceConfig{
+	
+	//Variables hibernate
+	private SessionFactory sFactory;
+	private Session session;
+	private Transaction transaction;
+	
+	
+	//ArrayList<Cartas> cartas;
+	
+	//GET METHODS
+	
+	@GET
+	@Path("/saluda")
+	public String saluda() {
+		return "Bienvenido!!";
+	}
+	
+	
+	//POST METHODS
+	
+	@POST
+	@Path("/insertar")
+	public void insertCarta() {
+		if (sFactory == null) {
+			sFactory = HibernateUtil.getSessionFactory();
+			session = sFactory.getCurrentSession();
+			transaction = session.beginTransaction();
+		}
+		//Cartas carta = new Cartas("SEAT","IBIZA","España",1461,63,85,4,168,5600,9.5f);
+		//session.save(carta);
+		transaction.commit();
+	}
+	
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+    <libraryInfo home="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241" version="1.8.0_241">
+        <bootpath>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/resources.jar"/>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/rt.jar"/>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/sunrsasign.jar"/>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/jsse.jar"/>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/jce.jar"/>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/charsets.jar"/>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/jfr.jar"/>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/classes"/>
+        </bootpath>
+        <extensionDirs>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/ext"/>
+            <entry path="/usr/java/packages/lib/ext"/>
+        </extensionDirs>
+        <endorsedDirs>
+            <entry path="/home/carles/Descargas/jdk-8u241-linux-x64/jdk1.8.0_241/jre/lib/endorsed"/>
+        </endorsedDirs>
+    </libraryInfo>
+    <libraryInfo home="/usr/lib/jvm/java-11-openjdk-amd64" version="11.0.6"/>
+</libraryInfos>

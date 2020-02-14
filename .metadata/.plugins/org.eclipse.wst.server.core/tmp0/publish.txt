@@ -1,0 +1,4 @@
+#Tomcat publish data
+#Fri Feb 14 17:03:12 CET 2020
+org.eclipse.jst.jee.server\:/binary\:/home/carles/.m2/repository/org/apache/tomcat/tomcat-jasper/9.0.30/tomcat-jasper-9.0.30.jar=WEB-INF/lib/tomcat-jasper-9.0.30.jar
+org.eclipse.jst.jee.server\:/binary\:/home/carles/.m2/repository/org/apache/tomcat/tomcat-websocket/9.0.30/tomcat-websocket-9.0.30.jar=WEB-INF/lib/tomcat-websocket-9.0.30.jar
