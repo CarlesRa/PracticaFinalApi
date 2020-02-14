@@ -348,3 +348,7 @@
 2020-02-15 00:02:00,167 [Worker-52: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /home/carles/Acceso a Datos/eclipse-workNew/ApiJuegoDef/src/main/resources
 2020-02-15 00:02:00,168 [Worker-52: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
 2020-02-15 00:02:00,168 [Worker-52: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /home/carles/Acceso a Datos/eclipse-workNew/ApiJuegoDef/src/test/resources
+2020-02-15 00:17:34,885 [Worker-65: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2020-02-15 00:17:34,886 [Worker-65: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /home/carles/Acceso a Datos/eclipse-workNew/ApiJuegoDef/src/main/resources
+2020-02-15 00:17:34,887 [Worker-65: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2020-02-15 00:17:34,888 [Worker-65: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /home/carles/Acceso a Datos/eclipse-workNew/ApiJuegoDef/src/test/resources
