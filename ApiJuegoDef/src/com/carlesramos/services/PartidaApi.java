@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.ResourceConfig;
@@ -29,6 +30,7 @@ import model.Partidas;
 @Path("/inicio")
 public class PartidaApi extends ResourceConfig{
 	
+	private static final int EMPATE = 0;
 	private static final int JUGADOR_1 = 1;
 	private static final int JUGADOR_2 = 2;
 	
@@ -73,15 +75,18 @@ public class PartidaApi extends ResourceConfig{
 	}
 	
 	@GET
-	@Path("/comprobarJugada/{jugadorA}/{cartaJugadorA}/{caracteristica}/{jugadorB}"
-			+ "/cartaJugadorB")
+	@Path("/comprobarJugada")
 	@Produces(MediaType.TEXT_PLAIN)
-	public int comprobarJugada(@PathParam("cartaJugadorA")int idCartaA,
-			@PathParam("caracteristica")String caracteristica,
-			@PathParam("cartaJugadorB")int idCartaB){
-		int resultado;
+	public int comprobarJugada(@QueryParam("cartaJugadorA")int idCartaA,
+			@QueryParam("caracteristica")String caracteristica,
+			@QueryParam("cartaJugadorB")int idCartaB){
+		
+		int resultado = -1;
+		
 		sFactory = HibernateUtil.getSessionFactory();
 		session = sFactory.openSession();
+		
+		//Arreplegue la carta del jugador A
 		Query query= session.createQuery("from Cartas where idCarta = :idCarta");
 		query.setParameter("idCarta", idCartaA);
 		List<?>cartasA = query.getResultList();
@@ -89,6 +94,8 @@ public class PartidaApi extends ResourceConfig{
 			cartaA = (Cartas)cartasA.get(0);
 		}
 		else return -1;
+		
+		//Arerplegue la carta del jugador B
 		query = session.createQuery("from cartas where idCarta = :idCarta");
 		query.setParameter("idCarta", idCartaB);
 		List<?>cartasB = query.getResultList();
@@ -97,45 +104,83 @@ public class PartidaApi extends ResourceConfig{
 		}
 		else return -1;
 		
+		//Comprove la jugada segons el atribut seleccionat
 		switch (caracteristica) {
 			case "Motor" : {
 				if (cartaA.getMotor() < cartaB.getMotor()) {
-					return JUGADOR_2;
+					resultado = JUGADOR_2;
 				}
-				else return JUGADOR_1;
+				else if (cartaA.getMotor() == cartaB.getMotor()) {
+					resultado = EMPATE;
+				}
+				else resultado = JUGADOR_1;
+				break;
 			}
 			case "Potencia" : {
 				if (cartaA.getPotenciaKv() < cartaB.getPotenciaKv()) {
-					return JUGADOR_2;
+					resultado = JUGADOR_2;
 				}
-				else return JUGADOR_1;
+				else if (cartaA.getPotenciaKv() == cartaB.getPotenciaKv()) {
+					resultado = EMPATE;
+				}
+				else resultado = JUGADOR_1;
+				break;
 			}
 			case "Velocidad" : {
 				if (cartaA.getVelocidad() < cartaB.getVelocidad()) {
-					return JUGADOR_2;
+					resultado = JUGADOR_2;
 				}
-				else return JUGADOR_1;
+				else if (cartaA.getVelocidad() == cartaB.getVelocidad()) {
+					resultado = EMPATE;
+				}
+				else resultado = JUGADOR_1;
+				break;
 			}
 			case "Cilindros" : {
 				if (cartaA.getNumCilindros() < cartaB.getNumCilindros()) {
-					return JUGADOR_2;
+					resultado = JUGADOR_2;
 				}
-				else return JUGADOR_1;
+				else if (cartaA.getNumCilindros() == cartaB.getNumCilindros()) {
+					resultado = EMPATE;
+				}
+				else resultado = JUGADOR_1;
+				break;
 			}
 			case "Revoluciones" : {
 				if (cartaA.getRevoluciones() < cartaB.getRevoluciones()) {
-					return JUGADOR_1;
+					resultado = JUGADOR_1;
 				}
-				else return JUGADOR_2;
+				else if (cartaA.getRevoluciones() == cartaB.getRevoluciones()) {
+					resultado = EMPATE;
+				}
+				else resultado = JUGADOR_2;
+				break;
 			}
 			case "Consumo" : {
 				if (cartaA.getConsumo() < cartaB.getConsumo()) {
-					return JUGADOR_1;
+					resultado = JUGADOR_1;
 				}
-				else return JUGADOR_2;
+				else if (cartaA.getConsumo() == cartaB.getConsumo()) {
+					resultado = EMPATE;
+				}
+				else resultado = JUGADOR_2;
+				break;
 			}
 		}
-		return -1;
+		
+		//Faig el update de rondes guanyades de la carta
+		transaction = session.beginTransaction();
+		if (resultado == JUGADOR_1) {
+			cartaA.setRondasGanadas(cartaA.getRondasGanadas() + 1);
+			session.update(cartaA);
+		}
+		else if (resultado == JUGADOR_2) {
+			cartaB.setRondasGanadas(cartaB.getRondasGanadas() + 1);
+			session.update(cartaB);
+		}
+		transaction.commit();
+		session.close();
+		return resultado;
 		
 	}
 	
@@ -152,6 +197,7 @@ public class PartidaApi extends ResourceConfig{
 		Jugadores jugador = gson.fromJson(jSonJugador, Jugadores.class);
 		session.save(jugador);
 		transaction.commit();
+		session.close();
 	}
 	
 	@POST
@@ -165,6 +211,7 @@ public class PartidaApi extends ResourceConfig{
 		Partidas partida = gson.fromJson(jsonPartida, Partidas.class);
 		session.save(partida);
 		transaction.commit();
+		session.close();
 	}
 	
 	@POST
@@ -178,5 +225,6 @@ public class PartidaApi extends ResourceConfig{
 		Cartas carta = gson.fromJson(jsonCarta, Cartas.class); 
 		session.save(carta);
 		transaction.commit();
+		session.close();
 	}
 }
