@@ -82,7 +82,7 @@ public class PartidaApi extends ResourceConfig{
 		int resultado;
 		sFactory = HibernateUtil.getSessionFactory();
 		session = sFactory.openSession();
-		Query query= session.createQuery("from Cartas where idCarta = :idCarta");
+		/*Query query= session.createQuery("from Cartas where idCarta = :idCarta");
 		query.setParameter("idCarta", idCartaA);
 		List<?>cartasA = query.getResultList();
 		if (cartasA != null) {
@@ -95,11 +95,11 @@ public class PartidaApi extends ResourceConfig{
 		if (cartasB != null) {
 			cartaB = (Cartas)cartasA.get(0);
 		}
-		else return -1;
+		else return -1;*/
 		
 		switch (caracteristica) {
 			case "Motor" : {
-				if (cartaA.getMotor() < cartaB.getMotor()) {
+				if (idCartaA < idCartaB) {
 					return JUGADOR_2;
 				}
 				else return JUGADOR_1;

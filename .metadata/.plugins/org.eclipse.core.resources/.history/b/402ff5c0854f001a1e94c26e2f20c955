@@ -29,16 +29,12 @@ import model.Partidas;
 @Path("/inicio")
 public class PartidaApi extends ResourceConfig{
 	
-	private static final int JUGADOR_1 = 1;
-	private static final int JUGADOR_2 = 2;
-	
 	//Variables hibernate
 	private SessionFactory sFactory;
 	private Session session;
 	private Transaction transaction;
 	
-	private Cartas cartaA;
-	private Cartas cartaB;
+	
 	//ArrayList<Cartas> cartas;
 	
 	//GET METHODS
@@ -72,72 +68,6 @@ public class PartidaApi extends ResourceConfig{
 		return String.valueOf(rnd.nextInt(2));
 	}
 	
-	@GET
-	@Path("/comprobarJugada/{jugadorA}/{cartaJugadorA}/{caracteristica}/{jugadorB}"
-			+ "/cartaJugadorB")
-	@Produces(MediaType.TEXT_PLAIN)
-	public int comprobarJugada(@PathParam("cartaJugadorA")int idCartaA,
-			@PathParam("caracteristica")String caracteristica,
-			@PathParam("cartaJugadorB")int idCartaB){
-		int resultado;
-		sFactory = HibernateUtil.getSessionFactory();
-		session = sFactory.openSession();
-		Query query= session.createQuery("from Cartas where idCarta = :idCarta");
-		query.setParameter("idCarta", idCartaA);
-		List<?>cartasA = query.getResultList();
-		if (cartasA != null) {
-			cartaA = (Cartas)cartasA.get(0);
-		}
-		else return -1;
-		query = session.createQuery("from cartas where idCarta = :idCarta");
-		query.setParameter("idCarta", idCartaB);
-		List<?>cartasB = query.getResultList();
-		if (cartasB != null) {
-			cartaB = (Cartas)cartasA.get(0);
-		}
-		else return -1;
-		
-		switch (caracteristica) {
-			case "Motor" : {
-				if (cartaA.getMotor() < cartaB.getMotor()) {
-					return JUGADOR_2;
-				}
-				else return JUGADOR_1;
-			}
-			case "Potencia" : {
-				if (cartaA.getPotenciaKv() < cartaB.getPotenciaKv()) {
-					return JUGADOR_2;
-				}
-				else return JUGADOR_1;
-			}
-			case "Velocidad" : {
-				if (cartaA.getVelocidad() < cartaB.getVelocidad()) {
-					return JUGADOR_2;
-				}
-				else return JUGADOR_1;
-			}
-			case "Cilindros" : {
-				if (cartaA.getNumCilindros() < cartaB.getNumCilindros()) {
-					return JUGADOR_2;
-				}
-				else return JUGADOR_1;
-			}
-			case "Revoluciones" : {
-				if (cartaA.getRevoluciones() < cartaB.getRevoluciones()) {
-					return JUGADOR_1;
-				}
-				else return JUGADOR_2;
-			}
-			case "Consumo" : {
-				if (cartaA.getConsumo() < cartaB.getConsumo()) {
-					return JUGADOR_1;
-				}
-				else return JUGADOR_2;
-			}
-		}
-		return -1;
-		
-	}
 	
 	//POST METHODS
 	
