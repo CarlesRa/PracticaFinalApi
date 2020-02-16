@@ -26,24 +26,24 @@ import java.util.UUID;
 @Path("/inicio")
 public class PartidaApi extends ResourceConfig{
 	
+	//Constants
 	private static final int EMPATE = 0;
 	private static final int JUGADOR_1 = 1;
 	private static final int JUGADOR_2 = 2;
 	private static final String LOGIN_FAIL = "Login_fail";
-	private static final int MAX_RONDAS = 6;
+	private static final int ERROR = -1;
 	
 	//Variables hibernate
 	private SessionFactory sFactory;
 	private Session session;
 	private Transaction transaction;
 	
-	//Variables juego
+	//Variables joc
 	private Cartas cartaA;
 	private Cartas cartaB;
-	private int numVictoriasJugadorA = 0;
-	private int numVictoriasJugadorB = 0;
 	private Jugadores jugador1;
 	private Jugadores jugador2;
+	private Partidas partida;
 	//ArrayList<Cartas> cartas;
 	
 	//GET METHODS
@@ -106,11 +106,6 @@ public class PartidaApi extends ResourceConfig{
 		session = sFactory.openSession();
 		Query query= session.createQuery("from Cartas");
 		cartasObtenidas = (ArrayList<Cartas>)query.getResultList();
-		/*if (cartas != null) {
-			for(int i=0; i<cartas.size(); i++) {
-				cartasObtenidas.add((Cartas)cartas.get(i));
-			}
-		}*/
 		session.close();
 		return g.toJson(cartasObtenidas);
 	}
@@ -119,10 +114,8 @@ public class PartidaApi extends ResourceConfig{
 	@Path("/comprobarJugada")
 	@Produces(MediaType.TEXT_PLAIN)
 	public int comprobarJugada(@QueryParam("idSession")String idSession,
-			@QueryParam("idJugadorA")int idJugadorA,
 			@QueryParam("cartaJugadorA")int idCartaA,
 			@QueryParam("caracteristica")String caracteristica,
-			@QueryParam("idJugadorB")int idJugadorB,
 			@QueryParam("cartaJugadorB")int idCartaB, @QueryParam("ronda")int ronda){
 		
 		int resultado = -1;
@@ -216,62 +209,81 @@ public class PartidaApi extends ResourceConfig{
 		transaction = session.beginTransaction();
 		if (resultado == JUGADOR_1) {
 			cartaA.setRondasGanadas(cartaA.getRondasGanadas() + 1);
-			numVictoriasJugadorA++;
 			session.update(cartaA);
 		}
 		else if (resultado == JUGADOR_2) {
 			cartaB.setRondasGanadas(cartaB.getRondasGanadas() + 1);
-			numVictoriasJugadorB++;
 			session.update(cartaB);
 		}
 		transaction.commit();
 		
-		//Si estem en la ultima ronda decidim el guanyador
-		if(ronda == MAX_RONDAS) {
-			
-			query = session.createQuery("from Jugadores where idJugador = :idJugador");
-			query.setParameter("idJugador", idJugadorA);
-			List<?>jugadorA = query.getResultList();
-			if (jugadorA != null) {
-				jugador1 = (Jugadores)jugadorA.get(0);
-			}	
-			
-			query = session.createQuery("from Jugadores where idJugador = :idJugador");
-			query.setParameter("idJugador", idJugadorB);
-			List<?>jugadorB = query.getResultList();
-			if (jugadorB != null) {
-				jugador2 = (Jugadores)jugadorA.get(0);
-			}	
-			
-			if (numVictoriasJugadorA > numVictoriasJugadorB) {
-				
-				if (jugadorA != null) {
-					jugador1.setGanadas(jugador1.getGanadas() + 1);
-					session.update(jugador1);
-					transaction.commit();
-					session.close();
-					return JUGADOR_1;
-				}
-			}
-			else if(numVictoriasJugadorA == numVictoriasJugadorB) {
-				jugador1.setEmpatadas(jugador1.getEmpatadas() + 1);
-				jugador2.setEmpatadas(jugador2.getEmpatadas() + 1);
-				session.update(jugador1);
-				session.update(jugador2);
-				transaction.commit();
-				session.close();
-				return EMPATE;
-			}
-			else {
-				jugador2.setGanadas(jugador2.getGanadas() + 1);
-				session.update(jugador2);
-				transaction.commit();
-				session.close();
-				return JUGADOR_2;
-			}
-		}
 		session.close();
 		return resultado;
+		
+	}
+	
+	@GET
+	@Path("/resultadoPartida")
+	@Produces(MediaType.TEXT_PLAIN)
+	public int resultadoPartida(@QueryParam("idSession")int idSession,
+			@QueryParam("idJugadorA")int idJugadorA,
+			@QueryParam("numVictoriasJugadorA")int numVictoriasJugadorA,
+			@QueryParam("idJugadorB")int idJugadorB,
+			@QueryParam("numVictoriasJugadorB")int numVictoriasJugadorB) {
+		
+		Query query;
+		query = session.createQuery("from Jugadores where idJugador = :idJugador");
+		query.setParameter("idJugador", idJugadorA);
+		List<?>jugadorA = query.getResultList();
+		if (jugadorA != null) {
+			jugador1 = (Jugadores)jugadorA.get(0);
+		}	
+
+		query = session.createQuery("from Jugadores where idJugador = :idJugador");
+		query.setParameter("idJugador", idJugadorB);
+		List<?>jugadorB = query.getResultList();
+		if (jugadorB != null) {
+			jugador2 = (Jugadores)jugadorA.get(0);
+		}	
+
+		query = session.createQuery("from Partidas where idSession = :idSession");
+		query.setParameter("idSession", idSession);
+		List<?>p = query.getResultList();
+		if (p != null) {
+			partida = (Partidas)p.get(0);
+		}
+
+		if (numVictoriasJugadorA > numVictoriasJugadorB) {
+
+			if (jugadorA != null) {
+				jugador1.setGanadas(jugador1.getGanadas() + 1);
+				partida.setGanador(jugador1.getIdJugador());
+				session.update(jugador1);
+				session.update(partida);
+				transaction.commit();
+				session.close();
+				return JUGADOR_1;
+			}
+		}
+		else if(numVictoriasJugadorA == numVictoriasJugadorB) {
+			jugador1.setEmpatadas(jugador1.getEmpatadas() + 1);
+			jugador2.setEmpatadas(jugador2.getEmpatadas() + 1);
+			session.update(jugador1);
+			session.update(jugador2);
+			transaction.commit();
+			session.close();
+			return EMPATE;
+		}
+		else {
+			jugador2.setGanadas(jugador2.getGanadas() + 1);
+			partida.setGanador(jugador2.getIdJugador());
+			session.update(jugador2);
+			session.update(partida);
+			transaction.commit();
+			session.close();
+			return JUGADOR_2;
+		}
+		return ERROR;
 		
 	}
 	
